@@ -8,4 +8,10 @@
     <string name="recipe_saved">Recipe saved!</string>
     <string name="save">Save</string>
     <string name="all_recipes">All Recipes</string>
+    <string name="recipe_detail">Recipe Detail</string>
+    <string name="delete">Delete</string>
+    <string name="delete_recipe">Delete Recipe</string>
+    <string name="are_you_sure_you_want_to_delete_this_recipe">Are you sure you want to delete this recipe?</string>
+    <string name="recipe_deleted">Recipe deleted</string>
+    <string name="cancel">Cancel</string>
 </resources>

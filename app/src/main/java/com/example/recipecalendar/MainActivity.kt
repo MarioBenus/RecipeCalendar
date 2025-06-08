@@ -12,12 +12,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import com.example.recipecalendar.ui.addrecipe.AddRecipeScreen
 import com.example.recipecalendar.ui.theme.RecipeCalendarTheme
 
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.example.recipecalendar.ui.recipedetail.RecipeDetailScreen
 import com.example.recipecalendar.ui.recipelist.RecipeListScreen
 
 
@@ -33,13 +36,26 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(navController = navController, startDestination = "recipe_list") {
                     composable("recipe_list") {
-                        RecipeListScreen(onAddRecipeClick = { navController.navigate("add_recipe") })
+                        RecipeListScreen(
+                            onAddRecipeClick = { navController.navigate("add_recipe") },
+                            onRecipeClick = { recipe ->
+                                navController.navigate("recipe_detail/${recipe.id}")
+                            },
+                        )
                     }
 
                     composable("add_recipe") {
                         AddRecipeScreen(
                             onBackClick = { navController.popBackStack() },
                             onRecipeSaved = { navController.popBackStack() }
+                        )
+                    }
+
+                    composable("recipe_detail/{recipeId}",
+                        arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+                    ) {
+                        RecipeDetailScreen(
+                            onBackClick = { navController.popBackStack() }
                         )
                     }
                 }

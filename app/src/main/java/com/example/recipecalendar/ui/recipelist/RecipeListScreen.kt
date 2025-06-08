@@ -34,6 +34,7 @@ import com.example.recipecalendar.data.Recipe
 fun RecipeListScreen(
     viewModel: RecipeListViewModel = viewModel(factory = RecipeListViewModel.factory),
     onAddRecipeClick: () -> Unit,
+    onRecipeClick: (Recipe) -> Unit
 ) {
     val recipes by viewModel.allRecipes.collectAsState()
 
@@ -52,19 +53,19 @@ fun RecipeListScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             items(recipes) { recipe ->
-                RecipeItem(recipe = recipe, onClick = {})
+                RecipeItem(recipe = recipe, onClick = onRecipeClick)
             }
         }
     }
 }
 
 @Composable
-fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
+fun RecipeItem(recipe: Recipe, onClick: (Recipe) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = { onClick(recipe) }),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
