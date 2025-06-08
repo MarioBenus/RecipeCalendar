@@ -35,6 +35,8 @@ fun EditRecipeScreen(
         var description by remember { mutableStateOf(recipe!!.description) }
         var ingredients by remember { mutableStateOf(recipe!!.ingredients) }
 
+        var nameError by remember { mutableStateOf(false) }
+
         Column(Modifier
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
@@ -44,9 +46,21 @@ fun EditRecipeScreen(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = name,
-                onValueChange = { name = it },
+                onValueChange = {
+                    name = it
+                    nameError = it.isBlank()
+                                },
+                isError = nameError,
                 label = { Text(stringResource(R.string.name)) }
             )
+            if (nameError) {
+                Text(
+                    text = stringResource(R.string.name_cannot_be_empty),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
@@ -65,8 +79,12 @@ fun EditRecipeScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    viewModel.updateRecipe(name, description, ingredients)
-                    onRecipeUpdated()
+                    if (name.isBlank()) {
+                        nameError = true
+                    } else {
+                        viewModel.updateRecipe(name, description, ingredients)
+                        onRecipeUpdated()
+                    }
                 }
             ) {
                 Text(stringResource(R.string.update_recipe))

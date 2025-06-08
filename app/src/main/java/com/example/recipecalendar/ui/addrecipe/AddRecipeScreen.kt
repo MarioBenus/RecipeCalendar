@@ -17,6 +17,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +42,8 @@ fun AddRecipeScreen(
     val description = viewModel.description
     val context = LocalContext.current
 
+    var nameError by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,10 +60,24 @@ fun AddRecipeScreen(
 
         OutlinedTextField(
             value = name,
-            onValueChange = viewModel::onNameChange,
+            onValueChange = {
+                viewModel.onNameChange(it)
+                if (nameError && it.isNotBlank()) {
+                    nameError = false
+                }
+            },
+            isError = nameError,
             label = { Text(stringResource(R.string.recipe_name)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
+        if (nameError) {
+            Text(
+                text = stringResource(R.string.name_cannot_be_empty),
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
 
         OutlinedTextField(
             value = ingredients,
@@ -77,13 +97,17 @@ fun AddRecipeScreen(
 
         Button(
             onClick = {
-                viewModel.saveRecipe {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.recipe_saved),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    onRecipeSaved()
+                if (name.isBlank()) {
+                    nameError = true
+                } else {
+                    viewModel.saveRecipe {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.recipe_saved),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        onRecipeSaved()
+                    }
                 }
             },
             modifier = Modifier.align(Alignment.End)
