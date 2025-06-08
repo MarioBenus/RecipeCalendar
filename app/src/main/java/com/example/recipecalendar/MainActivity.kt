@@ -15,6 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.recipecalendar.ui.addrecipe.AddRecipeScreen
 import com.example.recipecalendar.ui.theme.RecipeCalendarTheme
 
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.example.recipecalendar.ui.recipelist.RecipeListScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +27,25 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            AddRecipeScreen()
+
+            RecipeCalendarTheme {
+                val navController = rememberNavController()
+
+                NavHost(navController = navController, startDestination = "recipe_list") {
+                    composable("recipe_list") {
+                        RecipeListScreen(onAddRecipeClick = { navController.navigate("add_recipe") })
+                    }
+
+                    composable("add_recipe") {
+                        AddRecipeScreen(
+                            onBackClick = { navController.popBackStack() },
+                            onRecipeSaved = { navController.popBackStack() }
+                        )
+                    }
+                }
+
+            }
+
         }
     }
 }
