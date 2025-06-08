@@ -22,6 +22,9 @@ interface RecipeDao {
     @Delete
     suspend fun deletePlannedRecipe(planedRecipe: PlannedRecipe)
 
+    @Query("DELETE FROM planned_recipes WHERE id = :id")
+    suspend fun deletePlannedRecipeById(id: Int)
+
     @Update
     suspend fun updateRecipe(recipe: Recipe)
 

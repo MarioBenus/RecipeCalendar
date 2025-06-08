@@ -9,11 +9,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,13 +36,21 @@ import com.example.recipecalendar.data.Recipe
 fun RecipeListScreen(
     viewModel: RecipeListViewModel = viewModel(factory = RecipeListViewModel.factory),
     onAddRecipeClick: () -> Unit,
-    onRecipeClick: (Recipe) -> Unit
+    onRecipeClick: (Recipe) -> Unit,
+    onCalendarClick: () -> Unit
 ) {
     val recipes by viewModel.allRecipes.collectAsState()
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.all_recipes)) })
+            TopAppBar(
+                title = { Text(stringResource(R.string.all_recipes)) },
+                actions = {
+                    IconButton(onClick = onCalendarClick) {
+                        Icon(Icons.Default.DateRange, contentDescription = "Calendar")
+                    }
+                }
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddRecipeClick) {

@@ -18,4 +18,6 @@ interface RecipesRepository {
     suspend fun planRecipe(plannedRecipe: PlannedRecipe)
 
     suspend fun unplanRecipe(plannedRecipe: PlannedRecipe)
+
+    suspend fun unplanRecipeById(plannedRecipeId: Int)
 }

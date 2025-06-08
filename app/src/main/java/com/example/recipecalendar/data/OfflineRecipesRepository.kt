@@ -19,4 +19,6 @@ class OfflineRecipesRepository(private val recipeDao: RecipeDao) : RecipesReposi
 
     override suspend fun unplanRecipe(plannedRecipe: PlannedRecipe) = recipeDao.deletePlannedRecipe(plannedRecipe)
 
+    override suspend fun unplanRecipeById(plannedRecipeId: Int) = recipeDao.deletePlannedRecipeById(plannedRecipeId)
+
 }

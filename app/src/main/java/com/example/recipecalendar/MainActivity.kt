@@ -1,10 +1,12 @@
 package com.example.recipecalendar
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -20,11 +22,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.recipecalendar.ui.calendar.CalendarScreen
 import com.example.recipecalendar.ui.recipedetail.RecipeDetailScreen
 import com.example.recipecalendar.ui.recipelist.RecipeListScreen
 
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,6 +45,7 @@ class MainActivity : ComponentActivity() {
                             onRecipeClick = { recipe ->
                                 navController.navigate("recipe_detail/${recipe.id}")
                             },
+                            onCalendarClick = { navController.navigate("calendar") }
                         )
                     }
 
@@ -56,6 +61,15 @@ class MainActivity : ComponentActivity() {
                     ) {
                         RecipeDetailScreen(
                             onBackClick = { navController.popBackStack() }
+                        )
+                    }
+
+                    composable("calendar") {
+                        CalendarScreen(
+                            onBackClick = { navController.popBackStack() },
+                            onRecipeClick = { recipeId ->
+                                navController.navigate("recipe_detail/${recipeId}")
+                            },
                         )
                     }
                 }
