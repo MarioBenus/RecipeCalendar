@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.recipecalendar.ui.calendar.CalendarScreen
+import com.example.recipecalendar.ui.editrecipe.EditRecipeScreen
 import com.example.recipecalendar.ui.recipedetail.RecipeDetailScreen
 import com.example.recipecalendar.ui.recipelist.RecipeListScreen
 
@@ -60,7 +61,10 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
                     ) {
                         RecipeDetailScreen(
-                            onBackClick = { navController.popBackStack() }
+                            onBackClick = { navController.popBackStack() },
+                            onEditClick = { recipe ->
+                                navController.navigate("edit_recipe/${recipe.id}")
+                            },
                         )
                     }
 
@@ -72,6 +76,21 @@ class MainActivity : ComponentActivity() {
                             },
                         )
                     }
+
+                    composable(
+                        route = "edit_recipe/{recipeId}",
+                        arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val recipeId = backStackEntry.arguments?.getInt("recipeId")
+                        if (recipeId != null) {
+                            EditRecipeScreen(
+                                recipeId = recipeId,
+                                onRecipeUpdated = { navController.popBackStack() }
+                            )
+                        }
+                    }
+
+
                 }
 
             }

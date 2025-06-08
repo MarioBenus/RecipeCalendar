@@ -12,6 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,12 +37,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.recipecalendar.R
+import com.example.recipecalendar.data.Recipe
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeDetailScreen(
     onBackClick: () -> Unit,
+    onEditClick: (Recipe) -> Unit,
     viewModel: RecipeDetailViewModel = viewModel(factory = RecipeDetailViewModel.factory)
 ) {
     val recipe by viewModel.recipe.collectAsState()
@@ -64,6 +67,13 @@ fun RecipeDetailScreen(
                     IconButton(onClick = { showDialog = true }) {
                         Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete), tint = Color.Red)
                     }
+                    recipe?.let {
+                        IconButton(onClick = { onEditClick(it) }) {
+                            Icon(Icons.Default.Edit, contentDescription = "Edit Recipe")
+                        }
+                    }
+
+
 
                 }
             )
